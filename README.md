@@ -1,2 +1,5 @@
 # tutek-home-server
-Storing scripts and configuration files to set up my home server called Tutek
+Scripts and configuration files to set up my home server called Tutek
+
+## Specs
+Currently runnig Ubuntu Server LTS 24.04 on a HP Pavilion notebook with 2GB RAM
