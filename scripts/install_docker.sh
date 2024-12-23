@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script installs docker engine.
+# It was taken by compiling steps from  official Docker Engine Ubuntu Installation Guide and tweaked a little.
+
 
 # Unninstall all conflicting packages
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
@@ -20,6 +23,6 @@ echo \
 sudo apt-get update
 
 # Install the Docker packages
-sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-sudo docker run hello-world
+docker --version

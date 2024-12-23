@@ -1,0 +1,59 @@
+services:
+
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80/tcp"
+    environment:
+      TZ: ${TZ}
+      WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
+    volumes:
+      - ${PIHOLE_LOCAL_DIRECTORY}/etc-pihole:/etc/pihole
+      - ${PIHOLE_LOCAL_DIRECTORY}/etc-dnsmasq.d:/etc/dnsmasq.d
+    restart: unless-stopped
+  
+
+  freshrss:
+    image: freshrss/freshrss:latest
+    container_name: freshrss
+    ports:
+      - "8080:80" 
+    volumes:
+      - ${FRESHRSS_LOCAL_DIRECTORY}/data:/var/www/FreshRSS/data
+      - ${FRESHRSS_LOCAL_DIRECTORY}/extensions:/var/www/FreshRSS/extensions 
+    environment:
+      TZ: ${TZ} 
+    restart: unless-stopped
+  
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    network_mode: 'host'
+    volumes:
+      - ${JELLYFIN_LOCAL_DIRECTORY}/config:/config
+      - ${JELLYFIN_LOCAL_DIRECTORY}/cache:/cache
+      - type: bind
+        source: /media/jellyfin
+        target: /media
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=${QBITTORRENT_WEBUI_PORT}
+      - TORRENTING_PORT=${QBITTORRENT_TORRENTING_PORT}
+    volumes:
+      - ${QBITTORRENT_LOCAL_DIRECTORY}/config:/config
+      - ${QBITTORRENT_LOCAL_DIRECTORY}/downloads:/downloads
+    ports:
+      - ${QBITTORRENT_WEBUI_PORT}:${QBITTORRENT_WEBUI_PORT}
+      - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}
+      - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}/udp
+    restart: unless-stopped
