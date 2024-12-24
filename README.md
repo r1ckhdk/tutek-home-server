@@ -1,5 +1,6 @@
 # Tutek: My home server 
 This repo stores scripts and configuration files to set up my home server called **Tutek**
+
 Services are set up with docker compose.
 
 As for now, I'm running these services:
@@ -28,6 +29,12 @@ If your server is running in a recent Ubuntu/Debian distro you may have to deact
 
 Run these commands:
 `systemctl disable systemd-resolved.service`
+
 `systemctl stop systemd-resolved`
 
 Thanks to [AlfonsoVM](https://discourse.pi-hole.net/t/docker-unable-to-bind-to-port-53/45082/8)
+
+## Running services
+To start services run:
+
+`docker compose up -d`
