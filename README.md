@@ -3,7 +3,7 @@ This repo stores scripts and configuration files to set up my home server called
 Services are set up with docker compose.
 
 As for now, I'm running these services:
-- pihole -> DNS server/sinkhole
+- Pi-hole -> DNS server/sinkhole
 - FreshRSS -> RSS reader
 - Jellyfin -> Media server
 - qBittorrent -> Torrent client
@@ -30,4 +30,4 @@ Run these commands:
 `systemctl disable systemd-resolved.service`
 `systemctl stop systemd-resolved`
 
-Thanks to (AlfonsoVM)[https://discourse.pi-hole.net/t/docker-unable-to-bind-to-port-53/45082/8]
+Thanks to [AlfonsoVM](https://discourse.pi-hole.net/t/docker-unable-to-bind-to-port-53/45082/8)
