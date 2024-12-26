@@ -8,6 +8,7 @@ As for now, I'm running these services:
 - FreshRSS -> RSS reader
 - Jellyfin -> Media server
 - qBittorrent -> Torrent client
+- slskd -> Client-server app for the Soulseek file sharing network
 
 ## Specs
 Currently running Ubuntu Server LTS 24.04 on a low-end-old laptop

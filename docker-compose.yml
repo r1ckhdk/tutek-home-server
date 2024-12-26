@@ -57,3 +57,17 @@ services:
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}/udp
     restart: unless-stopped
+
+  slskd: 
+    image: slskd/slskd:latest
+    container_name: slskd
+    environment:
+      - TZ=${TZ}
+      - SLSKD_REMOTE_CONFIGURATION=true
+    ports:
+      - 5030:5030/tcp
+      - 5031:5031/tcp
+      - 50300:50300/tcp
+    volumes:
+      - ${SLSKD_LOCAL_DIRECTORY}:/app:rw
+    user: ${PUID}:${PGID}
