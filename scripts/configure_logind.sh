@@ -23,7 +23,7 @@ fi
 sudo sed -i '/^#\?HandleLidSwitch=/c\HandleLidSwitch=ignore' $CONFIG_FILE && \
 sudo sed -i '/^#\?HandleLidSwitchExternalPower=/c\HandleLidSwitchExternalPower=ignore' $CONFIG_FILE && \
 sudo sed -i '/^#\?HandleLidSwitchDocked=/c\HandleLidSwitchDocked=ignore' $CONFIG_FILE && \
-sudo sed -i '/^#\?LidSwitchIgnoreInhibited=/c\LidSwitchIgnoreInhibited=yes' $CONFIG_FILE && \
+sudo sed -i '/^#\?LidSwitchIgnoreInhibited=/c\LidSwitchIgnoreInhibited=no' $CONFIG_FILE && \
 sudo sed -i '/^#\?HandleSuspendKey=/c\HandleSuspendKey=ignore' $CONFIG_FILE && \
 sudo sed -i '/^#\?IdleAction=/c\IdleAction=ignore' $CONFIG_FILE
 
