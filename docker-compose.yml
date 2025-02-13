@@ -1,5 +1,18 @@
 services:
 
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID} 
+    ports:
+      - 3000:3000
+    volumes:
+      - /srv/homepage/config:/app/config # Make sure your local config directory exists
+      - /var/run/docker.sock:/var/run/docker.sock:ro # optional, for docker integrations
+    restart: unless-stopped
+    
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
@@ -14,6 +27,9 @@ services:
       - ${PIHOLE_LOCAL_DIRECTORY}/etc-pihole:/etc/pihole
       - ${PIHOLE_LOCAL_DIRECTORY}/etc-dnsmasq.d:/etc/dnsmasq.d
     restart: unless-stopped
+    labels:
+      homepage.name: Pi-hole
+      homepage.group: Network
   
 
   freshrss:
@@ -27,6 +43,9 @@ services:
     environment:
       TZ: ${TZ} 
     restart: unless-stopped
+    labels:
+      homepage.name: FreshRSS
+      homepage.group: Media
   
   jellyfin:
     image: jellyfin/jellyfin
@@ -39,6 +58,9 @@ services:
         source: /media/jellyfin
         target: /media
     restart: unless-stopped
+    labels:
+      homepage.name: Jellyfin
+      homepage.group: Media
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -57,6 +79,9 @@ services:
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}/udp
     restart: unless-stopped
+    labels:
+      homepage.name: qBittorrent
+      homepage.group: Downloads
 
   slskd: 
     image: slskd/slskd:latest
@@ -71,3 +96,6 @@ services:
     volumes:
       - ${SLSKD_LOCAL_DIRECTORY}:/app:rw
     user: ${PUID}:${PGID}
+    labels:
+      homepage.name: Soulseekd
+      homepage.group: Downloads
