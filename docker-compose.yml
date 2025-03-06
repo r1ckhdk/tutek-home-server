@@ -11,7 +11,11 @@ services:
       - ${NGINX_LOCAL_DIRECTORY}/certs:/etc/nginx/certs
       - /srv/doityourblog:/var/www/doityourblog
     restart: unless-stopped
-
+    labels:
+      homepage.name: Nginx
+      homepage.group: Network
+      homepage.href: ${SERVER_IP}
+      homepage.description: Web server / reverse proxy
 
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
@@ -40,6 +44,11 @@ services:
       - ${PIHOLE_LOCAL_DIRECTORY}/etc-pihole:/etc/pihole
       - ${PIHOLE_LOCAL_DIRECTORY}/etc-dnsmasq.d:/etc/dnsmasq.d
     restart: unless-stopped
+    labels:
+      homepage.name: Pi-hole
+      homepage.group: Network
+      homepage.href: ${SERVER_IP}:8080
+      homepage.description: DNS server/sinkhole
 
   freshrss:
     image: freshrss/freshrss:alpine
@@ -57,8 +66,8 @@ services:
     labels:
       homepage.name: FreshRSS
       homepage.group: Media
-      homepage.href: ${SERVER_IP}:8080
-      homepage.description: Self-hosted RSS aggregator
+      homepage.href: ${SERVER_IP}:8081
+      homepage.description: RSS aggregator
   
   jellyfin:
     image: jellyfin/jellyfin
@@ -74,6 +83,8 @@ services:
     labels:
       homepage.name: Jellyfin
       homepage.group: Media
+      homepage.href: ${SERVER_IP}:8096
+      homepage.description: Media server
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -92,6 +103,11 @@ services:
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}/udp
     restart: unless-stopped
+    labels:
+      homepage.name: qBittorrent 
+      homepage.group: Downloads
+      homepage.href: ${SERVER_IP}:8085
+      homepage.description: Torrent client
 
   slskd: 
     image: slskd/slskd:latest
@@ -106,3 +122,8 @@ services:
     volumes:
       - ${SLSKD_LOCAL_DIRECTORY}:/app:rw
     user: ${PUID}:${PGID}
+    labels:
+      homepage.name: slskd 
+      homepage.group: Downloads
+      homepage.href: ${SERVER_IP}:5030
+      homepage.description: Soulseek p2p client daemon
