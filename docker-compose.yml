@@ -1,11 +1,24 @@
 services:
 
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ${NGINX_LOCAL_DIRECTORY}/nginx.conf:/etc/nginx/nginx.conf
+      - ${NGINX_LOCAL_DIRECTORY}/certs:/etc/nginx/certs
+      - /srv/doityourblog:/var/www/doityourblog
+    restart: unless-stopped
+
+
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
     environment:
       PUID: ${PUID}
-      PGID: ${PGID} 
+      PGID: ${DOCKER_GID}
     ports:
       - 3000:3000
     volumes:
@@ -19,7 +32,7 @@ services:
     ports:
       - "53:53/tcp"
       - "53:53/udp"
-      - "80:80/tcp"
+      - "8080:80/tcp"
     environment:
       TZ: ${TZ}
       WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
@@ -27,25 +40,25 @@ services:
       - ${PIHOLE_LOCAL_DIRECTORY}/etc-pihole:/etc/pihole
       - ${PIHOLE_LOCAL_DIRECTORY}/etc-dnsmasq.d:/etc/dnsmasq.d
     restart: unless-stopped
-    labels:
-      homepage.name: Pi-hole
-      homepage.group: Network
-  
 
   freshrss:
-    image: freshrss/freshrss:latest
+    image: freshrss/freshrss:alpine
     container_name: freshrss
     ports:
-      - "8080:80" 
+      - "8081:80" 
     volumes:
       - ${FRESHRSS_LOCAL_DIRECTORY}/data:/var/www/FreshRSS/data
       - ${FRESHRSS_LOCAL_DIRECTORY}/extensions:/var/www/FreshRSS/extensions 
     environment:
       TZ: ${TZ} 
     restart: unless-stopped
+    dns:
+      - 1.1.1.1   # alpine image needs additional dns setup; using cloudfare dns address
     labels:
       homepage.name: FreshRSS
       homepage.group: Media
+      homepage.href: ${SERVER_IP}:8080
+      homepage.description: Self-hosted RSS aggregator
   
   jellyfin:
     image: jellyfin/jellyfin
@@ -79,9 +92,6 @@ services:
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}/udp
     restart: unless-stopped
-    labels:
-      homepage.name: qBittorrent
-      homepage.group: Downloads
 
   slskd: 
     image: slskd/slskd:latest
@@ -96,6 +106,3 @@ services:
     volumes:
       - ${SLSKD_LOCAL_DIRECTORY}:/app:rw
     user: ${PUID}:${PGID}
-    labels:
-      homepage.name: Soulseekd
-      homepage.group: Downloads
