@@ -102,6 +102,8 @@ services:
       - ${QBITTORRENT_WEBUI_PORT}:${QBITTORRENT_WEBUI_PORT}
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}/udp
+    dns:
+      - 1.1.1.1
     restart: unless-stopped
     labels:
       homepage.name: qBittorrent 
