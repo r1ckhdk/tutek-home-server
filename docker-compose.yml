@@ -9,7 +9,7 @@ services:
     volumes:
       - ${NGINX_LOCAL_DIRECTORY}/nginx.conf:/etc/nginx/nginx.conf
       - ${NGINX_LOCAL_DIRECTORY}/certs:/etc/nginx/certs
-      - /srv/doityourblog:/var/www/doityourblog
+      - ~/blogs/${BLOG_NAME}/public:/var/www/${BLOG_NAME}
     restart: unless-stopped
     labels:
       homepage.name: Nginx
