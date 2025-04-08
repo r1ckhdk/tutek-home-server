@@ -7,15 +7,55 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ${NGINX_LOCAL_DIRECTORY}/nginx.conf:/etc/nginx/nginx.conf
+      - ${NGINX_LOCAL_DIRECTORY}/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ${NGINX_LOCAL_DIRECTORY}/conf.d:/etc/nginx/conf.d
       - ${NGINX_LOCAL_DIRECTORY}/certs:/etc/nginx/certs
       - ~/blogs/${BLOG_NAME}/public:/var/www/${BLOG_NAME}
     restart: unless-stopped
+    depends_on:
+      - jellyfin
     labels:
       homepage.name: Nginx
       homepage.group: Network
       homepage.href: ${SERVER_IP}
       homepage.description: Web server / reverse proxy
+
+  woodpecker-server:
+    image: woodpeckerci/woodpecker-server:latest
+    container_name: woodpecker-server
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - ${WOODPECKER_SERVER_DIRECTORY}/data/:/var/lib/woodpecker/
+    environment:
+      - WOODPECKER_OPEN=true
+      - WOODPECKER_HOST=${WOODPECKER_HOST}
+      - WOODPECKER_GITHUB=true
+      - WOODPECKER_GITHUB_CLIENT=${WOODPECKER_GITHUB_CLIENT}
+      - WOODPECKER_GITHUB_SECRET=${WOODPECKER_GITHUB_SECRET}
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+    dns:
+      - 1.1.1.1
+    networks:
+      - woodpecker
+
+  woodpecker-agent:
+    image: woodpeckerci/woodpecker-agent:latest
+    command: agent
+    restart: always
+    depends_on:
+      - woodpecker-server
+    volumes:
+      - ${WOODPECKER_AGENT_DIRECTORY}:/etc/woodpecker
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WOODPECKER_SERVER=woodpecker-server:9000
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+      - WOODPECKER_HEALTHCHECK=false
+    networks:
+      - woodpecker
 
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
@@ -24,7 +64,7 @@ services:
       PUID: ${PUID}
       PGID: ${DOCKER_GID}
     ports:
-      - 3000:3000
+      - 3001:3000
     volumes:
       - /srv/homepage/config:/app/config # Make sure your local config directory exists
       - /var/run/docker.sock:/var/run/docker.sock:ro # optional, for docker integrations
@@ -43,6 +83,8 @@ services:
     volumes:
       - ${PIHOLE_LOCAL_DIRECTORY}/etc-pihole:/etc/pihole
       - ${PIHOLE_LOCAL_DIRECTORY}/etc-dnsmasq.d:/etc/dnsmasq.d
+    dns:
+      - 1.1.1.1
     restart: unless-stopped
     labels:
       homepage.name: Pi-hole
@@ -72,13 +114,16 @@ services:
   jellyfin:
     image: jellyfin/jellyfin
     container_name: jellyfin
-    network_mode: 'host'
+    ports:
+      - "8096:8096"
     volumes:
       - ${JELLYFIN_LOCAL_DIRECTORY}/config:/config
       - ${JELLYFIN_LOCAL_DIRECTORY}/cache:/cache
       - type: bind
         source: /media/jellyfin
         target: /media
+    dns:
+      - 1.1.1.1
     restart: unless-stopped
     labels:
       homepage.name: Jellyfin
@@ -110,7 +155,23 @@ services:
       homepage.group: Downloads
       homepage.href: ${SERVER_IP}:8085
       homepage.description: Torrent client
-
+  
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - AUTO_UPDATE=true #optional
+      - RUN_OPTS= #optional
+    volumes:
+      - ${JACKETT_LOCAL_DIRECTORY}/config:/config
+      - ${JACKETT_LOCAL_DIRECTORY}/blackhole:/downloads
+    ports:
+      - 9117:9117
+    restart: unless-stopped
+  
   slskd: 
     image: slskd/slskd:latest
     container_name: slskd
@@ -129,3 +190,6 @@ services:
       homepage.group: Downloads
       homepage.href: ${SERVER_IP}:5030
       homepage.description: Soulseek p2p client daemon
+
+networks:
+  woodpecker:
