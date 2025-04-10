@@ -1,5 +1,5 @@
 pipeline:
   update-tutek:
-    image: debian:bookwork
+    image: debian:bookworm
     commands:
       - chroot /host /bin/bash /scripts/update-tutek.sh
