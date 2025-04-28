@@ -1,5 +1,7 @@
 pipeline:
   update-tutek:
-    image: debian:bookworm
-    commands:
-      - chroot /host /bin/bash /scripts/update-tutek.sh
+    image: alpine
+	commands:
+	  - apk add --no-cache docker
+	  - docker run --rm --privileged -v /:/host alpine chroot /host apt update
+	  - docker run --rm --privileged -v /:/host alpine chroot /host apt upgrade -y

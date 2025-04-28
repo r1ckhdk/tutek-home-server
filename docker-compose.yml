@@ -50,12 +50,11 @@ services:
     volumes:
       - ${WOODPECKER_AGENT_DIRECTORY}:/etc/woodpecker
       - /var/run/docker.sock:/var/run/docker.sock
-      - ~/tutek-home-server/scripts:/scripts:ro
-      - /:/host
     environment:
       - WOODPECKER_SERVER=woodpecker-server:9000
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
       - WOODPECKER_HEALTHCHECK=false
+      - WOODPECKER_BACKEND=docker
     dns:
       - 1.1.1.1
     networks:
