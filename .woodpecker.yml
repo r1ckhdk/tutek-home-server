@@ -4,5 +4,5 @@ steps:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
-      - docker run --rm --privileged -v /:/host --dns 1.1.1.1 alpine chroot /host apt-get update
-      - docker run --rm --privileged -v /:/host --dns 1.1.1.1 alpine chroot /host apt-get upgrade -y
+      - docker run --rm --privileged -v /:/host ubuntu chroot /host apt-get update
+      - docker run --rm --privileged -v /:/host ubuntu chroot /host apt-get upgrade -y
