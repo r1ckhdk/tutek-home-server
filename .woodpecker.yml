@@ -1,7 +1,7 @@
 pipeline:
   update-tutek:
-  image: alpine
-  commands:
-    - apk add --no-cache docker
-    - docker run --rm --privileged -v /:/host alpine chroot /host apt update
-    - docker run --rm --privileged -v /:/host alpine chroot /host apt upgrade -y
+    image: alpine
+    commands:
+      - apk add --no-cache docker
+      - docker run --rm --privileged -v /:/host alpine chroot /host apt update
+      - docker run --rm --privileged -v /:/host alpine chroot /host apt upgrade -y
