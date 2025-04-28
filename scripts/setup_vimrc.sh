@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -euo pipefail
 
 VIMRC_PATH="${HOME}/.vimrc"
 
@@ -14,6 +14,7 @@ fi
 
 cat > "${VIMRC_PATH}" << "EOF"
 set number
+set shiftwidth=4
 set smartindent
 set autoindent
 set showmatch

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -euo pipefail
 
 # Check if script is being run as root
 if [ "$(id -u)" -ne 0 ]; then
@@ -10,7 +10,7 @@ fi
 
 CONFIG_FILE="/etc/systemd/logind.conf"
 
-echo "Configuring logind to ignore closed lid"
+echo "Configuring logind to ignore closed lid..."
 
 
 # Backup logind.conf file
@@ -33,4 +33,4 @@ echo "Configuration changes applied on ${CONFIG_FILE}"
 echo "Restarting service systemd-logind..."
 sudo systemctl restart systemd-logind
 
-echo "Configuration finished. Now the system ignores lid closing"
+echo "Configuration finished! Now the system ignores lid closing"
