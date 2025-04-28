@@ -1,8 +1,8 @@
 pipeline:
   update-tutek:
     image: docker:24.0
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    commands:
+    settings:
+	  docker_socket: true
+	commands:
       - docker run --rm --privileged -v /:/host alpine chroot /host apt update
       - docker run --rm --privileged -v /:/host alpine chroot /host apt upgrade -y
