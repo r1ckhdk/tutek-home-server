@@ -1,9 +1,11 @@
 steps:
-  update-tutek:
+  - name: update-tutek
     image: docker:24.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - docker run --rm --privileged --network host -v /:/host ubuntu chroot /host apt-get update
       - docker run --rm --privileged --network host -v /:/host ubuntu chroot /host apt-get upgrade -y
-
+    when:
+      event: cron
+      cron: update-apt
