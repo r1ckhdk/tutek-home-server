@@ -32,9 +32,11 @@ On scripts folder there are currently two scripts.
 If your server is running in a recent Ubuntu/Debian distro you may have to deactivate systemd-resolved, since it is listening on port 53.
 
 Run these commands:
-`systemctl disable systemd-resolved.service`
 
-`systemctl stop systemd-resolved`
+```bash
+systemctl disable systemd-resolved.service
+systemctl stop systemd-resolved
+```
 
 Thanks to [AlfonsoVM](https://discourse.pi-hole.net/t/docker-unable-to-bind-to-port-53/45082/8)
 
