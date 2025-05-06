@@ -36,6 +36,8 @@ services:
       - WOODPECKER_GITHUB_CLIENT=${WOODPECKER_GITHUB_CLIENT}
       - WOODPECKER_GITHUB_SECRET=${WOODPECKER_GITHUB_SECRET}
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+      - WOODPECKER_SERVER_ALLOW_TRUSTED=true
+      - WOODPECKER_ADMIN=r1ckhdk
     dns:
       - 1.1.1.1
     networks:
@@ -45,16 +47,15 @@ services:
     image: woodpeckerci/woodpecker-agent:latest
     command: agent
     restart: always
+    privileged: true
     depends_on:
       - woodpecker-server
     volumes:
-      - ${WOODPECKER_AGENT_DIRECTORY}:/etc/woodpecker
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - WOODPECKER_SERVER=woodpecker-server:9000
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
       - WOODPECKER_HEALTHCHECK=false
-      - WOODPECKER_BACKEND=docker
     dns:
       - 1.1.1.1
     networks:
@@ -145,7 +146,7 @@ services:
       - TORRENTING_PORT=${QBITTORRENT_TORRENTING_PORT}
     volumes:
       - ${QBITTORRENT_LOCAL_DIRECTORY}/config:/config
-      - ${QBITTORRENT_LOCAL_DIRECTORY}/downloads:/downloads
+      - /media/jellyfin:/downloads
     ports:
       - ${QBITTORRENT_WEBUI_PORT}:${QBITTORRENT_WEBUI_PORT}
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}
