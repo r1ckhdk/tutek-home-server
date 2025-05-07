@@ -8,8 +8,10 @@ steps:
       key:
         from_secret: woodpecker_ssh_key
       commands:
-        - apt-get update
-        - apt-get upgrade -y
+        - echo "Running apt-get update..."
+        - apt-get update | tee /dev/stdout
+	- echo "Running apt-get upgrade..."
+        - apt-get upgrade -y | tee /dev/stdout
 #    when:
 #      event: cron
 #      cron: update-apt
