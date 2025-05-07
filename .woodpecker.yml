@@ -1,11 +1,17 @@
 steps:
   - name: update-tutek
-    image: docker:24.0
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    commands:
-      - docker run --rm --privileged --network host -v /:/host ubuntu chroot /host apt-get update
-      - docker run --rm --privileged --network host -v /:/host ubuntu chroot /host apt-get upgrade -y
+    image: ghcr.io/appleboy/drone-ssh
+    secrets: [ WOODPECKER_SSH_KEY, HOST_IP ]
+    settings:
+      host:
+        from_secret: host_ip
+    username: woodpecker
+    password:
+      from_secret: woodpecker_ssh_key
+    commant_timeout: 2m
+    script:
+      - apt-get update
+      - apt-get upgrade -y
     when:
       event: cron
       cron: update-apt
