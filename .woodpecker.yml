@@ -9,6 +9,6 @@ steps:
         from_secret: woodpecker_ssh_key
       script:
         - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > STARTING PACKAGES UPDATE"
-        - apt-get update
-        - apt-get upgrade -y
+        - sudo apt-get update
+        - sudo apt-get upgrade -y
         - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > UPDATE FINISHED"
