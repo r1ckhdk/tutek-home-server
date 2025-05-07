@@ -1,0 +1,24 @@
+steps:
+  - name: system-update
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: host_ip
+      username: woodpecker
+      key:
+        from_secret: woodpecker_ssh_key
+      script:
+        - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > STARTING PACKAGES UPDATE"
+        - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > UPDATING REPOSITORIES..."
+        - sudo apt-get update -y
+        - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > UPGRADING PACKAGES..."
+        - sudo apt-get upgrade -y
+        - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > CLEANING UNUSED DEPNDENCIES AND CACHE..."
+        - sudo apt-get autoclean -y
+        - sudo apt-get autoremove -y
+        - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > UPDATE FINISHED"
+
+    when:
+      - event: cron
+        cron: update-apt
+      - event: manual
