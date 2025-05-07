@@ -7,10 +7,9 @@ steps:
       username: woodpecker
       password:
         from_secret: woodpecker_ssh_key
-    command_timeout: 2m
-    script:
-      - apt-get update
-      - apt-get upgrade -y
+      commands:
+        - apt-get update
+        - apt-get upgrade -y
     when:
       event: cron
       cron: update-apt
