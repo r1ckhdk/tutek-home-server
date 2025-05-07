@@ -19,5 +19,6 @@ steps:
         - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > UPDATE FINISHED"
 
     when:
-      event: cron
-      cron: update-apt
+      - event: cron
+        cron: update-apt
+      - event: manual
