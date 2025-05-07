@@ -10,6 +10,6 @@ steps:
       commands:
         - apt-get update
         - apt-get upgrade -y
-    when:
-      event: cron
-      cron: update-apt
+#    when:
+#      event: cron
+#      cron: update-apt
