@@ -1,5 +1,5 @@
 steps:
-  - name: ssh-connection
+  - name: system-update
     image: appleboy/drone-ssh
     settings:
       host:
@@ -8,6 +8,7 @@ steps:
       key:
         from_secret: woodpecker_ssh_key
       script:
-        - echo "Establishing SSH connection..."
-        - echo "Listing available upgrades:"
-        - apt list --upgradable
+        - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > STARTING PACKAGES UPDATE"
+        - apt-get update
+        - apt-get upgrade -y
+	- echo "[$(date '+%Y-%m-%d %H:%M:%S')] > UPDATE FINISHED"
