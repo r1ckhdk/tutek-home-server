@@ -1,7 +1,6 @@
 steps:
   - name: update-tutek
     image: ghcr.io/appleboy/drone-ssh
-    secrets: [ WOODPECKER_SSH_KEY, HOST_IP ]
     settings:
       host:
         from_secret: host_ip
