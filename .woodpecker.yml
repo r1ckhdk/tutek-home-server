@@ -9,5 +9,5 @@ steps:
         from_secret: woodpecker_ssh_key
       script:
         - echo "Establishing SSH connection..."
-	- echo "Listing available upgrades:"
-	- apt list --upgradable
+        - echo "Listing available upgrades:"
+        - apt list --upgradable
