@@ -8,8 +8,9 @@ KEY_NAME="${USERNAME}_id_ed25519"
 KEY_PATH="${SSH_DIR}/${KEY_NAME}"
 PUB_KEY_PATH="${KEY_PATH}.pub"
 SUDO_FILE="/etc/sudoers.d/${USERNAME}"
+AUTHORIZED_KEYS="${SSH_DIR}/authorized_keys"
 
-if ! id "$USERNAME"; then
+if ! id "$USERNAME" &>/dev/null; then
     echo "Creating user $USERNAME..."
     useradd -m $USERNAME
 else
@@ -32,7 +33,7 @@ fi
 
 if [[ ! -f "$KEY_PATH" ]]; then
     echo "Generating SSH key for ${USERNAME}..."
-    ssh-keygen -t ed25519 -f "$KEY_PATH" -N ""
+    ssh-keygen -t ed25519 -f "$KEY_PATH" -N "" -C "${USERNAME}@$(hostname)" &>/dev/null
     chown "${USERNAME}:${USERNAME}" "$KEY_PATH" "$PUB_KEY_PATH"
     chmod 600 "$KEY_PATH"
     chmod 644 "$PUB_KEY_PATH"
