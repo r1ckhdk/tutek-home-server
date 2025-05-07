@@ -10,7 +10,7 @@ steps:
       commands:
         - echo "Running apt-get update..."
         - apt-get update | tee /dev/stdout
-	- echo "Running apt-get upgrade..."
+        - echo "Running apt-get upgrade..."
         - apt-get upgrade -y | tee /dev/stdout
 #    when:
 #      event: cron
