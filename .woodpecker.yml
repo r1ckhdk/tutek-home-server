@@ -5,7 +5,7 @@ steps:
       host:
         from_secret: host_ip
       username: woodpecker
-      password:
+      key:
         from_secret: woodpecker_ssh_key
       commands:
         - apt-get update
