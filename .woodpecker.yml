@@ -1,18 +1,20 @@
-steps:
-  - name: ssh-connect
-    image: ghcr.io/appleboy/drone-ssh
-    settings:
-      host:
-        from_secret: host_ip
-      username: woodpecker
-      key:
-        from_secret: woodpecker_ssh_key
-      commands:
-        - whoami
-        - hostname
+---
+kind: pipeline
+type: ssh
+name: Tutorial
+
+server:
+  host:
+    from_secret: host_ip
+  user: woodpecker
+  ssh_key:
+    from_secret: woodpecker_ssh_key
+
 #    when:
 #      event: cron
 #      cron: update-apt
+
+steps:
   - name: update-apt
     commands:
     - echo "Updating apt..."
