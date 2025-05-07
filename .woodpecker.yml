@@ -1,5 +1,5 @@
 steps:
-  - name: update-tutek
+  - name: ssh-connect
     image: ghcr.io/appleboy/drone-ssh
     settings:
       host:
@@ -8,10 +8,14 @@ steps:
       key:
         from_secret: woodpecker_ssh_key
       commands:
-        - echo "Running apt-get update..."
-        - apt-get update | tee /dev/stdout
-        - echo "Running apt-get upgrade..."
-        - apt-get upgrade -y | tee /dev/stdout
+        - whoami
+        - hostname
 #    when:
 #      event: cron
 #      cron: update-apt
+  - name: update-apt
+    commands:
+    - echo "Updating apt..."
+    - apt-get update
+    - apt-get upgrade -y
+    - echo "Update completed."
