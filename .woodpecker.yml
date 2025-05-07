@@ -11,4 +11,4 @@ steps:
         - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > STARTING PACKAGES UPDATE"
         - apt-get update
         - apt-get upgrade -y
-	- echo "[$(date '+%Y-%m-%d %H:%M:%S')] > UPDATE FINISHED"
+        - echo "[$(date '+%Y-%m-%d %H:%M:%S')] > UPDATE FINISHED"
