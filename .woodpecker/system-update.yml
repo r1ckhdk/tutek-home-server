@@ -1,6 +1,7 @@
+name: System Update
 skip_clone: true
 steps:
-  - name: system-update
+  - name: Update and clean APT packages
     image: appleboy/drone-ssh
     settings:
       host:
