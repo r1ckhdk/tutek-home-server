@@ -30,6 +30,8 @@ services:
     volumes:
       - ${WOODPECKER_SERVER_DIRECTORY}/data/:/var/lib/woodpecker/
     environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
       - WOODPECKER_OPEN=true
       - WOODPECKER_HOST=${WOODPECKER_HOST}
       - WOODPECKER_GITHUB=true
@@ -95,6 +97,56 @@ services:
       homepage.group: Network
       homepage.href: ${SERVER_IP}:8080
       homepage.description: DNS server/sinkhole
+
+  rsshub:
+    # two ways to enable puppeteer:
+    # * comment out marked lines, then use this image instead: diygod/rsshub:chromium-bundled
+    # * (consumes more disk space and memory) leave everything unchanged
+    container_name: rsshub
+    image: diygod/rsshub
+    restart: always
+    ports:
+        - "1200:1200"
+    environment:
+        NODE_ENV: production
+        CACHE_TYPE: redis
+        REDIS_URL: "redis://redis:6379/"
+        PUPPETEER_WS_ENDPOINT: "ws://browserless:3000" # marked
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:1200/healthz"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+    depends_on:
+        - redis
+        - browserless # marked
+
+  browserless: # 
+    container_name: browserless
+    image: browserless/chrome # marked
+    restart: always # marked
+    ulimits: # marked
+        core: # marked
+            hard: 0 # marked
+            soft: 0 # marked
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:3000/pressure"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: always
+    volumes:
+        - ${REDIS_LOCAL_DIRECTORY}/data:/data
+    healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+        start_period: 5s
 
   freshrss:
     image: freshrss/freshrss:alpine
