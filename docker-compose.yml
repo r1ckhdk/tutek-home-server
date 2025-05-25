@@ -199,6 +199,7 @@ services:
     volumes:
       - ${QBITTORRENT_LOCAL_DIRECTORY}/config:/config
       - /media/jellyfin:/downloads
+      - /media/red:/red
     ports:
       - ${QBITTORRENT_WEBUI_PORT}:${QBITTORRENT_WEBUI_PORT}
       - ${QBITTORRENT_TORRENTING_PORT}:${QBITTORRENT_TORRENTING_PORT}
