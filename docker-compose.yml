@@ -20,49 +20,6 @@ services:
       homepage.href: ${SERVER_IP}
       homepage.description: Web server / reverse proxy
 
-  woodpecker-server:
-    image: woodpeckerci/woodpecker-server:latest
-    container_name: woodpecker-server
-    restart: always
-    ports:
-      - "8000:8000"
-      - "9000:9000"
-    volumes:
-      - ${WOODPECKER_SERVER_DIRECTORY}/data/:/var/lib/woodpecker/
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - WOODPECKER_OPEN=true
-      - WOODPECKER_HOST=${WOODPECKER_HOST}
-      - WOODPECKER_GITHUB=true
-      - WOODPECKER_GITHUB_CLIENT=${WOODPECKER_GITHUB_CLIENT}
-      - WOODPECKER_GITHUB_SECRET=${WOODPECKER_GITHUB_SECRET}
-      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
-      - WOODPECKER_SERVER_ALLOW_TRUSTED=true
-      - WOODPECKER_ADMIN=r1ckhdk
-    dns:
-      - 1.1.1.1
-    networks:
-      - woodpecker
-
-  woodpecker-agent:
-    image: woodpeckerci/woodpecker-agent:latest
-    command: agent
-    restart: always
-    privileged: true
-    depends_on:
-      - woodpecker-server
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - WOODPECKER_SERVER=woodpecker-server:9000
-      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
-      - WOODPECKER_HEALTHCHECK=false
-    dns:
-      - 1.1.1.1
-    networks:
-      - woodpecker
-
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage

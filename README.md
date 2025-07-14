@@ -5,7 +5,6 @@ Services are set up with docker compose.
 
 As for now, I'm running these services:
 - Nginx -> Web server / reverse proxy
-- Woodpecker CI -> CI/CD engine
 - Homepage -> UI dashboard for the server
 - Pi-hole -> DNS server/sinkhole
 - FreshRSS -> RSS reader
