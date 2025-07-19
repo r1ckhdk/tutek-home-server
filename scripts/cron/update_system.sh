@@ -17,27 +17,27 @@ mkdir -p "${LOG_DIR}"
 
 log "INFO" "Starting system update..."
 
-log "INFO" "Executing apt update..."
-apt update >> "${LOG_FILE}" 2>&1 || {
-    log "ERROR" "Failure when executing apt update"
+log "INFO" "Executing apt-get update..."
+apt-get update >> "${LOG_FILE}" 2>&1 || {
+    log "ERROR" "Failure when executing apt-get update"
     exit 1
 }
 
-log "INFO" "Executing apt upgrade..."
-apt upgrade -y >> "${LOG_FILE}" 2>&1 || {
-    log "ERROR" "Failure when executing apt upgrade"
+log "INFO" "Executing apt-get upgrade..."
+apt-get upgrade -y >> "${LOG_FILE}" 2>&1 || {
+    log "ERROR" "Failure when executing apt-get upgrade"
     exit 1
 }
 
-log "INFO" "Executing apt autoclean..."
-apt autoclean >> "${LOG_FILE}" 2>&1 || {
-    log "ERROR" "Failure when executing apt autoclean"
+log "INFO" "Executing apt-get autoclean..."
+apt-get autoclean >> "${LOG_FILE}" 2>&1 || {
+    log "ERROR" "Failure when executing apt-get autoclean"
     exit 1
 }
 
-log "INFO" "Executing apt autoremove..."
-apt autoremove -y >> "${LOG_FILE}" 2>&1 || {
-    log "ERROR" "Failure when executing apt autoremove"
+log "INFO" "Executing apt-get autoremove..."
+apt-get autoremove -y >> "${LOG_FILE}" 2>&1 || {
+    log "ERROR" "Failure when executing apt-get autoremove"
     exit 1
 }
 
